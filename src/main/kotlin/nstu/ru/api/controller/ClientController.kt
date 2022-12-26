@@ -11,41 +11,45 @@ import nstu.ru.api.service.UserService
 
 fun Route.clientRoute(userService: UserService) {
 
-    authenticate("jwt-token") {
-        route("/clients") {
-            get {
-                val id = call.parameters["id"]
-                if (id.isNullOrEmpty()) {
-                    val appUser = userService.findAllClients()
-                    call.respond(message = appUser, status = HttpStatusCode.OK)
-                    return@get
-                }
-                val appUser = userService.getClientById(id.toInt())
+    route("/clients") {
+        get {
+            val id = call.parameters["id"]
+            if (id.isNullOrEmpty()) {
+                val appUser = userService.findAllClients()
                 call.respond(message = appUser, status = HttpStatusCode.OK)
+                return@get
             }
-            post {
-                val request = call.receive<ClientRequest>()
-                userService.insertClient(request)
-                call.respond(message = "", status = HttpStatusCode.OK)
+            val appUser = userService.getClientById(id.toInt())
+            call.respond(message = appUser, status = HttpStatusCode.OK)
+        }
+        post {
+            val request = call.receive<ClientRequest>()
+            userService.insertClient(request)
+            call.respond(message = "", status = HttpStatusCode.OK)
+        }
+        put {
+            val id = call.parameters["id"]
+            if (id.isNullOrEmpty()) {
+                call.respond(
+                    message = "Id not found!",
+                    status = HttpStatusCode.NotFound
+                )
+                return@put
             }
-            put {
-                val id = call.parameters["id"]
-                if (id.isNullOrEmpty()) {
-                    call.respond(message = "Id not found!", status = HttpStatusCode.NotFound)
-                    return@put
-                }
-                val request = call.receive<ClientRequest>()
-                userService.updateClient(id.toInt(), request)
-                call.respond(message = "", status = HttpStatusCode.OK)
+            val request = call.receive<ClientRequest>()
+            userService.updateClient(id.toInt(), request)
+            call.respond(message = "", status = HttpStatusCode.OK)
+        }
+        delete {
+            val id = call.parameters["id"]
+            if (id.isNullOrEmpty()) {
+                call.respond(
+                    message = "Id not found!",
+                    status = HttpStatusCode.NotFound
+                )
             }
-            delete {
-                val id = call.parameters["id"]
-                if (id.isNullOrEmpty()) {
-                    call.respond(message = "Id not found!", status = HttpStatusCode.NotFound)
-                }
-                userService.deleteClient(id!!.toInt())
-                call.respond(message = "", status = HttpStatusCode.OK)
-            }
+            userService.deleteClient(id!!.toInt())
+            call.respond(message = "", status = HttpStatusCode.OK)
         }
     }
 }

@@ -11,42 +11,46 @@ import nstu.ru.api.service.UserService
 
 fun Route.houseRoute(userService: UserService) {
 
-    authenticate("jwt-token") {
-        route("/houses") {
-            get {
-                val id = call.parameters["id"]
-                if (id.isNullOrEmpty()) {
-                    val appUser = userService.findAllHouses()
-                    call.respond(message = appUser, status = HttpStatusCode.OK)
-                    return@get
-                }
-                val appUser = userService.getHouseById(id.toInt())
+    route("/houses") {
+        get {
+            val id = call.parameters["id"]
+            if (id.isNullOrEmpty()) {
+                val appUser = userService.findAllHouses()
                 call.respond(message = appUser, status = HttpStatusCode.OK)
+                return@get
             }
-            post {
-                val request = call.receive<HouseRequest>()
-                userService.insertHouse(request)
-                call.respond(message = "", status = HttpStatusCode.OK)
+            val appUser = userService.getHouseById(id.toInt())
+            call.respond(message = appUser, status = HttpStatusCode.OK)
+        }
+        post {
+            val request = call.receive<HouseRequest>()
+            userService.insertHouse(request)
+            call.respond(message = "", status = HttpStatusCode.OK)
+        }
+        put {
+            val id = call.parameters["id"]
+            if (id.isNullOrEmpty()) {
+                call.respond(
+                    message = "Id not found!",
+                    status = HttpStatusCode.NotFound
+                )
+                return@put
             }
-            put {
-                val id = call.parameters["id"]
-                if (id.isNullOrEmpty()) {
-                    call.respond(message = "Id not found!", status = HttpStatusCode.NotFound)
-                    return@put
-                }
-                val request = call.receive<HouseRequest>()
-                userService.updateHouse(id.toInt(), request)
-                call.respond(message = "", status = HttpStatusCode.OK)
+            val request = call.receive<HouseRequest>()
+            userService.updateHouse(id.toInt(), request)
+            call.respond(message = "", status = HttpStatusCode.OK)
+        }
+        delete {
+            val id = call.parameters["id"]
+            if (id.isNullOrEmpty()) {
+                call.respond(
+                    message = "Id not found!",
+                    status = HttpStatusCode.NotFound
+                )
+                return@delete
             }
-            delete {
-                val id = call.parameters["id"]
-                if (id.isNullOrEmpty()) {
-                    call.respond(message = "Id not found!", status = HttpStatusCode.NotFound)
-                    return@delete
-                }
-                userService.deleteHouse(id.toInt())
-                call.respond(message = "", status = HttpStatusCode.OK)
-            }
+            userService.deleteHouse(id.toInt())
+            call.respond(message = "", status = HttpStatusCode.OK)
         }
     }
 }

@@ -1,23 +1,12 @@
 package nstu.ru.api.service
 
-import nstu.ru.api.domain.ApplicationUserDomain
 import nstu.ru.api.domain.ClientDomain
 import nstu.ru.api.domain.HouseDomain
 import nstu.ru.api.model.request.ClientRequest
 import nstu.ru.api.model.request.HouseRequest
-import nstu.ru.api.model.response.ApplicationUserResponse
 import nstu.ru.api.repository.UserRepository
 
-
 class UserService(private val userRepository: UserRepository) {
-    suspend fun findUserByNameAndPassword(
-        name: String,
-        password: String
-    ): ApplicationUserDomain =
-        userRepository.findUserByUserNameAndPassword(name, password)
-
-    suspend fun findUserByName(userName: String): ApplicationUserResponse =
-        userRepository.findUserByName(userName)
 
     suspend fun findAllClients(): List<ClientDomain> =
         userRepository.findAllClients()

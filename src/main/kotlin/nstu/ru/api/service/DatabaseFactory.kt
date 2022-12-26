@@ -2,8 +2,6 @@ package nstu.ru.api.service
 
 import com.zaxxer.hikari.HikariDataSource
 import io.ktor.server.config.*
-import nstu.ru.api.domain.ApplicationFirm
-import nstu.ru.api.domain.ApplicationUser
 import nstu.ru.api.domain.Client
 import nstu.ru.api.domain.House
 import org.flywaydb.core.Flyway
@@ -17,7 +15,7 @@ class DatabaseFactory(private val config: HoconApplicationConfig) {
         Database.connect(dataSource)
         transaction {
             SchemaUtils.createDatabase()
-            SchemaUtils.create(tables = arrayOf(ApplicationFirm, ApplicationUser, Client, House))
+            SchemaUtils.create(tables = arrayOf(Client, House))
         }
         runFlyWay(dataSource)
     }
