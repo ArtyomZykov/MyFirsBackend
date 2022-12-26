@@ -38,6 +38,7 @@ dependencies {
 
     implementation("org.postgresql:postgresql:$postgresql_version")
 
+    implementation("io.ktor:ktor-server-swagger:$ktor_version")
     implementation("io.ktor:ktor-server-core:$ktor_version")
     implementation("io.ktor:ktor-server-auth:$ktor_version")
     implementation("io.ktor:ktor-server-auth-jwt:$ktor_version")

@@ -4,18 +4,20 @@ import com.zaxxer.hikari.HikariDataSource
 import io.ktor.server.config.*
 import nstu.ru.api.domain.Client
 import nstu.ru.api.domain.House
+import nstu.ru.api.domain.Request
 import org.flywaydb.core.Flyway
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class DatabaseFactory(private val config: HoconApplicationConfig) {
+
     fun initialize() {
         val dataSource = hikariDataSource()
         Database.connect(dataSource)
         transaction {
             SchemaUtils.createDatabase()
-            SchemaUtils.create(tables = arrayOf(Client, House))
+            SchemaUtils.create(tables = arrayOf(Client, Request, House))
         }
         runFlyWay(dataSource)
     }
