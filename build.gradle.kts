@@ -24,7 +24,7 @@ dependencies {
     val flywaydb_version = "9.8.3"
     val jetbrainsExposed_version = "0.40.1"
     val postgresql_version = "42.5.1"
-    
+
     implementation("org.slf4j:slf4j-api:$slf4j_version")
     implementation("org.slf4j:slf4j-simple:$slf4j_version")
 
